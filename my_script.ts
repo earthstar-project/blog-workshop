@@ -45,8 +45,15 @@ for await (const entry of Deno.readDir(POSTS_PATH)) {
 
 // =========================================================================
 
-// Let's see if it worked!
+// Let's sync!
 
-const allDocs = await replica.getLatestDocs();
+// 1. Make a peer.
+const peer = new Earthstar.Peer();
 
-console.log(allDocs);
+// 2. Add the replica.
+peer.addReplica(replica);
+
+// 3. Sync with the URL. Use ws! Don't forget pathname!
+peer.sync("ws://localhost:8080/earthstar-api/v2");
+
+console.log("Syncing with ws://localhost:8080/earthstar-api/v2");
