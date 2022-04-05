@@ -1,6 +1,7 @@
 import * as Earthstar from "https://deno.land/x/earthstar@8.2.4/mod.ts";
 import { TransportWebsocketServer } from "https://deno.land/x/earthstar_streaming_rpc/mod.ts";
 import { serve } from "https://deno.land/std@0.133.0/http/mod.ts";
+import { micromark } from "https://esm.sh/micromark";
 
 // =========================================================================
 
@@ -52,7 +53,11 @@ async function handler(req: Request) {
     return new Response("Not found", { status: 404 });
   }
 
-  return new Response(document.content);
+  return new Response(micromark(document.content), {
+    headers: {
+      "Content-Type": "text/html; charset=utf-8",
+    },
+  });
 }
 
 console.log("Running server on http://localhost:8080");
